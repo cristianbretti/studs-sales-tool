@@ -49,12 +49,13 @@
 
 .body-row {
   display: flex;
+  margin-bottom: 5%;
 }
 
 .content {
   width: 100%;
-  padding-left: 5%;
-  padding-right: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
 }
 
 .section-container {
@@ -157,7 +158,6 @@ tr > th:hover {
 }
 
 .contact-card {
-  margin-bottom: 5%;
   padding: 2%;
   display: flex;
   flex-direction: column;
@@ -180,6 +180,7 @@ tr > th:hover {
 
 .contact-comment {
   text-align: left;
+  padding-top: 5%;
 }
 
 .card-actions {
@@ -232,7 +233,7 @@ label {
 }
 
 .profile-date-time-container {
-  margin-right: 5%;
+  margin-right: 2%;
   min-width: 15%;
 }
 

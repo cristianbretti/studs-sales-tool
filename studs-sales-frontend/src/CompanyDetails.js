@@ -11,7 +11,8 @@ import {
   addCommentApi,
   updateCommentApi,
   deleteCommentApi,
-  addContactApi
+  addContactApi,
+  deleteContactApi
 } from './api';
 import { statuses } from './constants';
 
@@ -180,6 +181,17 @@ class CompanyDetails extends Component {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  deleteContact = async id => {
+    if (window.confirm('Are you sure you want to delete this contact?')) {
+      const deleted = await deleteContactApi(id);
+      if (deleted) {
+        this.getContacts();
+      } else {
+        console.log('could not delete comment with id: ' + id);
+      }
     }
   };
 
@@ -409,7 +421,12 @@ class CompanyDetails extends Component {
         </div>
         <div className="card-actions">
           <button className="btn-primary">Edit</button>
-          <button className="btn-danger">Delete</button>
+          <button
+            className="btn-danger"
+            onClick={() => this.deleteContact(contactInfo.id)}
+          >
+            Delete
+          </button>
         </div>
       </div>
     );

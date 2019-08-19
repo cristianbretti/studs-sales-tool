@@ -172,3 +172,19 @@ export const addContactApi = data => {
     }
   });
 };
+
+export const deleteContactApi = id => {
+  return fetch(`http://localhost:3005/api/contacts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(resp => {
+    if (resp.ok) {
+      return true;
+    } else {
+      console.log(resp);
+      return false;
+    }
+  });
+};

@@ -61,12 +61,13 @@ app.get('/api/companies/:id/info', async (req, res) => {
 
 const CONTACT_INFO_QUERY =
   'SELECT ' +
+  'contact.contact_id AS id, ' +
   'contact.name AS name, ' +
   'contact.phone_number AS phone_number, ' +
   'contact.email AS email, ' +
   'contact.comment AS comment ' +
   'FROM company AS company ' +
-  'JOIN contact_info AS contact ' +
+  'JOIN contact AS contact ' +
   'ON company.company_id = contact.company_key ' +
   'WHERE company.company_id = ? ';
 
@@ -85,7 +86,7 @@ app.get('/api/companies/:id/contacts', async (req, res) => {
 //---------//
 
 const INSERT_CONTACT_QUERY =
-  'INSERT INTO contact_info ' +
+  'INSERT INTO contact ' +
   '(company_key, name, phone_number, email, comment) ' +
   'VALUES (?, ?, ?, ?, ?)';
 
@@ -103,6 +104,17 @@ app.post('/api/companies/:id/contacts', async (req, res) => {
     email,
     comment
   ]);
+  res.sendStatus(200);
+});
+
+//---------//
+
+const DELETE_CONTACT_QUERY = 'DELETE FROM contact WHERE contact.contact_id = ?';
+
+app.delete('/api/contacts/:id', async (req, res) => {
+  const id = req.params.id;
+
+  const results = await db.query(DELETE_CONTACT_QUERY, id);
   res.sendStatus(200);
 });
 
