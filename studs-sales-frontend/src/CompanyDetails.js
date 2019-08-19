@@ -250,41 +250,42 @@ class CompanyDetails extends Component {
               </select>
             </div>
           </div>
-          <div className="content section-container">
-            <h4>Kommentarer</h4>
-            <div className="contact-cards-container">
-              <div className="card add-comment-card">
-                <textarea
-                  value={this.state.newComment}
-                  onChange={event => {
-                    this.setState({ newComment: event.target.value });
-                  }}
-                />
-                <button className="btn-primary" onClick={this.createComment}>
-                  Add
-                </button>
+          <div className="content body-row">
+            <div className="col-md-4 contact-sidebar">
+              <div className="contact-cards-container">
+                {this.state.contacts.map(contactInfo =>
+                  this.renderContactCard(contactInfo)
+                )}
+                <div>
+                  {this.state.showCreateContact &&
+                    this.renderCreateContactCard()}
+                  {!this.state.showCreateContact && (
+                    <button
+                      className="btn-primary"
+                      onClick={() => this.setState({ showCreateContact: true })}
+                    >
+                      Lägg till kontaktperson
+                    </button>
+                  )}
+                </div>
               </div>
-              {this.state.comments
-                .sort((a, b) => b.timestamp - a.timestamp)
-                .map(comment => this.renderCommentCard(comment))}
             </div>
-          </div>
-          <div className="content section-container">
-            <h4>Kontaktuppgifter</h4>
-            <div className="contact-cards-container">
-              {this.state.contacts.map(contactInfo =>
-                this.renderContactCard(contactInfo)
-              )}
-              <div>
-                {this.state.showCreateContact && this.renderCreateContactCard()}
-                {!this.state.showCreateContact && (
-                  <button
-                    className="btn-primary"
-                    onClick={() => this.setState({ showCreateContact: true })}
-                  >
+            <div className="col-md-8">
+              <div className="contact-cards-container">
+                <div className="card add-comment-card">
+                  <textarea
+                    value={this.state.newComment}
+                    onChange={event => {
+                      this.setState({ newComment: event.target.value });
+                    }}
+                  />
+                  <button className="btn-primary" onClick={this.createComment}>
                     Add
                   </button>
-                )}
+                </div>
+                {this.state.comments
+                  .sort((a, b) => b.timestamp - a.timestamp)
+                  .map(comment => this.renderCommentCard(comment))}
               </div>
             </div>
           </div>
@@ -409,67 +410,63 @@ class CompanyDetails extends Component {
   renderCreateContactCard = () => {
     return (
       <div className="card">
-        <div className="contact-card">
-          <div className="create-contact-inputs-container">
-            <label>Namn</label>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.newComment.name}
-              onChange={event =>
-                this.setState({
-                  newContact: {
-                    ...this.state.newContact,
-                    name: event.target.value
-                  }
-                })
-              }
-            />
-            <label>Telefonnummer</label>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.newComment.phone_number}
-              onChange={event =>
-                this.setState({
-                  newContact: {
-                    ...this.state.newContact,
-                    phone_number: event.target.value
-                  }
-                })
-              }
-            />
-            <label>Mejl</label>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.newComment.email}
-              onChange={event =>
-                this.setState({
-                  newContact: {
-                    ...this.state.newContact,
-                    email: event.target.value
-                  }
-                })
-              }
-            />
-          </div>
-          <div className="create-contact-inputs-container">
-            <label>Kommentar</label>
-            <input
-              type="text"
-              className="form-control"
-              value={this.state.newComment.comment}
-              onChange={event =>
-                this.setState({
-                  newContact: {
-                    ...this.state.newContact,
-                    comment: event.target.value
-                  }
-                })
-              }
-            />
-          </div>
+        <div className="contact-card create-contact-inputs-container">
+          <label>Namn</label>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.newComment.name}
+            onChange={event =>
+              this.setState({
+                newContact: {
+                  ...this.state.newContact,
+                  name: event.target.value
+                }
+              })
+            }
+          />
+          <label>Telefonnummer</label>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.newComment.phone_number}
+            onChange={event =>
+              this.setState({
+                newContact: {
+                  ...this.state.newContact,
+                  phone_number: event.target.value
+                }
+              })
+            }
+          />
+          <label>Mejl</label>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.newComment.email}
+            onChange={event =>
+              this.setState({
+                newContact: {
+                  ...this.state.newContact,
+                  email: event.target.value
+                }
+              })
+            }
+          />
+          <label>Kommentar</label>
+          <input
+            type="text"
+            className="form-control"
+            value={this.state.newComment.comment}
+            onChange={event =>
+              this.setState({
+                newContact: {
+                  ...this.state.newContact,
+                  comment: event.target.value
+                }
+              })
+            }
+          />
         </div>
         <div className="card-actions">
           <button className="btn-primary" onClick={this.createContact}>
