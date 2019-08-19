@@ -272,16 +272,24 @@ class CompanyDetails extends Component {
             </div>
             <div className="col-md-8">
               <div className="contact-cards-container">
-                <div className="card add-comment-card">
-                  <textarea
-                    value={this.state.newComment}
-                    onChange={event => {
-                      this.setState({ newComment: event.target.value });
-                    }}
-                  />
-                  <button className="btn-primary" onClick={this.createComment}>
-                    Add
-                  </button>
+                <div className="comment-container">
+                  <div className="profile-date-time-container">
+                    <img className="profile-pic" src={imgUrl} />
+                  </div>
+                  <div className="card add-comment-card">
+                    <textarea
+                      value={this.state.newComment}
+                      onChange={event => {
+                        this.setState({ newComment: event.target.value });
+                      }}
+                    />
+                    <button
+                      className="btn-primary"
+                      onClick={this.createComment}
+                    >
+                      Add
+                    </button>
+                  </div>
                 </div>
                 {this.state.comments
                   .sort((a, b) => b.timestamp - a.timestamp)

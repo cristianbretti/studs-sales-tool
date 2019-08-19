@@ -184,7 +184,7 @@ tr > th:hover {
 
 .card-actions {
   display: flex;
-  margin: 1%;
+  padding: 2%;
   justify-content: center;
 }
 
@@ -197,10 +197,16 @@ button {
   margin-right: 2%;
 }
 
+label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+
 .status-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 5%;
+  margin-bottom: 2%;
 }
 
 .status-container div:nth-child(2) {
@@ -212,6 +218,7 @@ button {
   padding: 2%;
   display: flex;
   flex-direction: row;
+  flex: 1;
 }
 
 .add-comment-card textarea {
@@ -226,10 +233,10 @@ button {
 
 .profile-date-time-container {
   margin-right: 5%;
+  min-width: 15%;
 }
 
 .comment-card {
-  margin-bottom: 5%;
   padding: 2%;
   flex: 1;
   display: flex;
