@@ -11,7 +11,8 @@ import {
   updateCommentApi,
   deleteCommentApi,
   addContactApi,
-  deleteContactApi
+  deleteContactApi,
+  updateContactApi
 } from '../utils/api';
 import { statuses } from '../utils/constants';
 
@@ -19,7 +20,8 @@ import {
   StaticCommentCard,
   EditCommentCard,
   CreateContactCard,
-  NewCommentCard
+  NewCommentCard,
+  StaticContactCard
 } from '../components';
 
 class CompanyDetails extends Component {
@@ -32,6 +34,7 @@ class CompanyDetails extends Component {
       contacts: [],
       comments: [],
       commentsBeingEdited: [],
+      contactsBeingEdited: [],
       completedUpdating: false,
       showCreateContact: false
     };
@@ -123,6 +126,14 @@ class CompanyDetails extends Component {
     }
   };
 
+  startEditingContact = contactId => {
+    if (!this.state.contactsBeingEdited.includes(contactId)) {
+      this.setState({
+        contactsBeingEdited: [...this.state.contactsBeingEdited, contactId]
+      });
+    }
+  };
+
   changeCommentText = (id, newText) => {
     let oldComments = this.state.comments;
     oldComments.find(comment => comment.id === id).text = newText;
@@ -142,6 +153,14 @@ class CompanyDetails extends Component {
   cancelEditingComment = id => {
     this.setState({
       commentsBeingEdited: this.state.commentsBeingEdited.filter(
+        idInList => idInList !== id
+      )
+    });
+  };
+
+  cancelEditingContact = id => {
+    this.setState({
+      contactsBeingEdited: this.state.contactsBeingEdited.filter(
         idInList => idInList !== id
       )
     });
@@ -184,6 +203,18 @@ class CompanyDetails extends Component {
       } else {
         console.log('could not delete comment with id: ' + id);
       }
+    }
+  };
+
+  saveContact = async (id, body) => {
+    const updated = await updateContactApi({ id, body });
+    if (updated) {
+      console.log('UPDATED CONTACT');
+      this.cancelEditingContact(id);
+      this.getContacts();
+    } else {
+      console.error('failed to update contact');
+      this.cancelEditingContact(id);
     }
   };
 
@@ -258,13 +289,27 @@ class CompanyDetails extends Component {
             <div className="col-md-4 h-100">
               <div className="contact-cards-container">
                 {this.state.contacts.map(contactInfo =>
-                  this.renderContactCard(contactInfo)
+                  this.isContactBeingEdited(contactInfo) ? (
+                    <CreateContactCard
+                      contactInfo={contactInfo}
+                      saveContact={body =>
+                        this.saveContact(contactInfo.id, body)
+                      }
+                      hideCard={() => this.cancelEditingContact(contactInfo.id)}
+                    />
+                  ) : (
+                    <StaticContactCard
+                      contactInfo={contactInfo}
+                      deleteContact={this.deleteContact}
+                      startEditingContact={this.startEditingContact}
+                    />
+                  )
                 )}
                 <div>
                   {this.state.showCreateContact && (
                     <CreateContactCard
-                      createContact={this.createContact}
-                      dontShowCreateContactCard={() =>
+                      saveContact={this.createContact}
+                      hideCard={() =>
                         this.setState({ showCreateContact: false })
                       }
                     />
@@ -313,35 +358,9 @@ class CompanyDetails extends Component {
     return this.state.commentsBeingEdited.includes(comment.id);
   };
 
-  renderContactCard(contactInfo) {
-    return (
-      <div className="card card-container">
-        <div className="p-2 flex flex-col justify-start items-start">
-          <div className="flex flex-col w-100">
-            <div className="text-left ml-1">
-              <b>Namn:</b> {contactInfo.name}
-            </div>
-            <div className="text-left ml-1">
-              <b>Nummer</b> {contactInfo.phone_number}
-            </div>
-            <div className="text-left ml-1">
-              <b>Mejl:</b> {contactInfo.email}
-            </div>
-          </div>
-          <div className="text-left pt-2">{contactInfo.comment}</div>
-        </div>
-        <div className="card-actions">
-          <button className="btn btn-primary">Edit</button>
-          <button
-            className="btn btn-danger"
-            onClick={() => this.deleteContact(contactInfo.id)}
-          >
-            Delete
-          </button>
-        </div>
-      </div>
-    );
-  }
+  isContactBeingEdited = contact => {
+    return this.state.contactsBeingEdited.includes(contact.id);
+  };
 }
 
 export default CompanyDetails;

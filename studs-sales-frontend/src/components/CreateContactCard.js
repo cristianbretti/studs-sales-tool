@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 
-export const CreateContactCard = ({
-  createContact,
-  dontShowCreateContactCard
-}) => {
-  const [name, setName] = useState('');
-  const [phone_number, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [comment, setComment] = useState('');
+export const CreateContactCard = ({ contactInfo, saveContact, hideCard }) => {
+  const [name, setName] = useState(contactInfo ? contactInfo.name : '');
+  const [phone_number, setPhoneNumber] = useState(
+    contactInfo ? contactInfo.phone_number : ''
+  );
+  const [email, setEmail] = useState(contactInfo ? contactInfo.email : '');
+  const [comment, setComment] = useState(
+    contactInfo ? contactInfo.comment : ''
+  );
   return (
     <div className="card">
       <div className="contact-card flex flex-col items-start mx-4">
@@ -43,14 +44,11 @@ export const CreateContactCard = ({
       <div className="card-actions">
         <button
           className="btn btn-primary"
-          onClick={() => createContact({ name, phone_number, email, comment })}
+          onClick={() => saveContact({ name, phone_number, email, comment })}
         >
           Save
         </button>
-        <button
-          className="btn btn-danger"
-          onClick={() => dontShowCreateContactCard()}
-        >
+        <button className="btn btn-danger" onClick={() => hideCard()}>
           Cancel
         </button>
       </div>

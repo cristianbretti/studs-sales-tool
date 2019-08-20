@@ -120,6 +120,34 @@ app.delete('/api/contacts/:id', async (req, res) => {
 
 //---------//
 
+const UPDATE_CONTACT_QUERY =
+  'UPDATE contact ' +
+  'SET ' +
+  'name = ?, ' +
+  'phone_number = ?, ' +
+  'email = ?, ' +
+  'comment = ? ' +
+  'WHERE contact.contact_id = ?';
+
+app.put('/api/contacts/:id', async (req, res) => {
+  const id = req.params.id;
+  const name = req.body.name;
+  const phone_number = req.body.phone_number;
+  const email = req.body.email;
+  const comment = req.body.comment;
+
+  const results = await db.query(UPDATE_CONTACT_QUERY, [
+    name,
+    phone_number,
+    email,
+    comment,
+    id
+  ]);
+  res.sendStatus(200);
+});
+
+//---------//
+
 const COMMENTS_QUERY =
   'SELECT ' +
   'comment.comment_id AS id, ' +

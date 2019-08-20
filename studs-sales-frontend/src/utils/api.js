@@ -188,3 +188,21 @@ export const deleteContactApi = id => {
     }
   });
 };
+
+export const updateContactApi = data => {
+  const { id, body } = data;
+  return fetch(`http://localhost:3005/api/contacts/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  }).then(resp => {
+    if (resp.ok) {
+      return true;
+    } else {
+      console.log(resp);
+      return false;
+    }
+  });
+};
