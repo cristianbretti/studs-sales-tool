@@ -12,8 +12,15 @@ import {
   deleteCommentApi,
   addContactApi,
   deleteContactApi
-} from '../api';
-import { statuses } from '../constants';
+} from '../utils/api';
+import { statuses } from '../utils/constants';
+
+import {
+  StaticCommentCard,
+  EditCommentCard,
+  CreateContactCard,
+  NewCommentCard
+} from '../components';
 
 class CompanyDetails extends Component {
   constructor(props) {
@@ -25,13 +32,6 @@ class CompanyDetails extends Component {
       contacts: [],
       comments: [],
       commentsBeingEdited: [],
-      newComment: '',
-      newContact: {
-        name: '',
-        phone_number: '',
-        email: '',
-        comment: ''
-      },
       completedUpdating: false,
       showCreateContact: false
     };
@@ -96,13 +96,13 @@ class CompanyDetails extends Component {
     }
   };
 
-  createComment = async () => {
+  createComment = async text => {
     try {
       const addedComment = await addCommentApi({
         id: this.state.companyId,
         body: {
           user: 1,
-          text: this.state.newComment
+          text
         }
       });
       if (addedComment) {
@@ -129,12 +129,11 @@ class CompanyDetails extends Component {
     this.setState({ comments: oldComments });
   };
 
-  saveNewComment = async id => {
-    const text = this.state.comments.find(comment => comment.id === id).text;
+  saveNewComment = async (id, text) => {
     const updated = await updateCommentApi({ id, body: { text } });
     if (updated) {
-      console.log('UPDATED');
       this.cancelEditingComment(id);
+      this.getComments();
     } else {
       console.log('could not update');
     }
@@ -159,23 +158,17 @@ class CompanyDetails extends Component {
     }
   };
 
-  createContact = async () => {
+  createContact = async body => {
     try {
       const addedComment = await addContactApi({
         id: this.state.companyId,
-        body: {
-          name: this.state.newContact.name,
-          phone_number: this.state.newContact.phone_number,
-          email: this.state.newContact.email,
-          comment: this.state.newContact.comment
-        }
+        body
       });
       if (addedComment) {
         console.log('ADDED Contact');
         this.getContacts();
         this.setState({
-          showCreateContact: false,
-          newContact: { name: {}, phone_number: {}, email: {}, comment: {} }
+          showCreateContact: false
         });
       }
     } catch (err) {
@@ -268,8 +261,14 @@ class CompanyDetails extends Component {
                   this.renderContactCard(contactInfo)
                 )}
                 <div>
-                  {this.state.showCreateContact &&
-                    this.renderCreateContactCard()}
+                  {this.state.showCreateContact && (
+                    <CreateContactCard
+                      createContact={this.createContact}
+                      dontShowCreateContactCard={() =>
+                        this.setState({ showCreateContact: false })
+                      }
+                    />
+                  )}
                   {!this.state.showCreateContact && (
                     <button
                       className="btn btn-primary"
@@ -283,31 +282,25 @@ class CompanyDetails extends Component {
             </div>
             <div className="col-md-8">
               <div className="contact-cards-container">
-                <div className="flex w-100">
-                  <div className="profile-date-time-container">
-                    <img className="profile-pic" src={imgUrl} />
-                  </div>
-                  <div className="card card-container">
-                    <input
-                      className="form-control m-4 w-auto"
-                      value={this.state.newComment}
-                      onChange={event => {
-                        this.setState({ newComment: event.target.value });
-                      }}
-                    />
-                    <div className="card-actions">
-                      <button
-                        className="btn btn-primary"
-                        onClick={this.createComment}
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
-                </div>
+                <NewCommentCard createComment={this.createComment} />
                 {this.state.comments
                   .sort((a, b) => b.timestamp - a.timestamp)
-                  .map(comment => this.renderCommentCard(comment))}
+                  .map(comment =>
+                    this.isCommentBeingEdited(comment) ? (
+                      <EditCommentCard
+                        comment={comment}
+                        changeCommentText={this.changeCommentText}
+                        saveNewComment={this.saveNewComment}
+                        cancelEditingComment={this.cancelEditingComment}
+                      />
+                    ) : (
+                      <StaticCommentCard
+                        comment={comment}
+                        startEditingComment={this.startEditingComment}
+                        deleteComment={this.deleteComment}
+                      />
+                    )
+                  )}
               </div>
             </div>
           </div>
@@ -316,88 +309,8 @@ class CompanyDetails extends Component {
     );
   }
 
-  renderCommentCard(comment) {
-    const isCommentBeingEdited = this.state.commentsBeingEdited.includes(
-      comment.id
-    );
-    if (isCommentBeingEdited) {
-      return this.renderEditCommentCard(comment);
-    } else {
-      return this.renderStaticCommentCard(comment);
-    }
-  }
-
-  renderStaticCommentCard = comment => {
-    return (
-      <div className="flex w-100">
-        <div className="profile-date-time-container">
-          <img className="profile-pic" src={imgUrl} />
-          <div className="text-sm">
-            {this.dateStringFromTimestamp(comment.timestamp)}
-          </div>
-          <div className="text-xs">
-            {this.timeStringFromTimestamp(comment.timestamp)}
-          </div>
-        </div>
-        <div className="card card-container">
-          <div className="flex-1 p-1 inline-block">{comment.text}</div>
-          <div className="card-actions">
-            <button
-              className="btn btn-primary"
-              onClick={() => this.startEditingComment(comment.id)}
-            >
-              Edit
-            </button>
-
-            <button
-              className="btn btn-danger"
-              onClick={() => this.deleteComment(comment.id)}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  renderEditCommentCard = comment => {
-    return (
-      <div className="flex w-100">
-        <div className="profile-date-time-container">
-          <img className="profile-pic" src={imgUrl} />
-          <div className="text-sm">
-            {this.dateStringFromTimestamp(comment.timestamp)}
-          </div>
-          <div className="text-xs">
-            {this.timeStringFromTimestamp(comment.timestamp)}
-          </div>
-        </div>
-        <div className="card card-container">
-          <input
-            className="form-control m-4 mt-0 w-auto"
-            value={this.state.comments.find(c => c.id === comment.id).text}
-            onChange={event =>
-              this.changeCommentText(comment.id, event.target.value)
-            }
-          />
-          <div className="card-actions">
-            <button
-              className="btn btn-primary"
-              onClick={() => this.saveNewComment(comment.id)}
-            >
-              Save
-            </button>
-            <button
-              className="btn btn-danger"
-              onClick={() => this.cancelEditingComment(comment.id)}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    );
+  isCommentBeingEdited = comment => {
+    return this.state.commentsBeingEdited.includes(comment.id);
   };
 
   renderContactCard(contactInfo) {
@@ -429,103 +342,6 @@ class CompanyDetails extends Component {
       </div>
     );
   }
-
-  renderCreateContactCard = () => {
-    return (
-      <div className="card">
-        <div className="contact-card flex flex-col items-start mx-4">
-          <label>Namn</label>
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.newComment.name}
-            onChange={event =>
-              this.setState({
-                newContact: {
-                  ...this.state.newContact,
-                  name: event.target.value
-                }
-              })
-            }
-          />
-          <label>Telefonnummer</label>
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.newComment.phone_number}
-            onChange={event =>
-              this.setState({
-                newContact: {
-                  ...this.state.newContact,
-                  phone_number: event.target.value
-                }
-              })
-            }
-          />
-          <label>Mejl</label>
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.newComment.email}
-            onChange={event =>
-              this.setState({
-                newContact: {
-                  ...this.state.newContact,
-                  email: event.target.value
-                }
-              })
-            }
-          />
-          <label>Kommentar</label>
-          <input
-            type="text"
-            className="form-control"
-            value={this.state.newComment.comment}
-            onChange={event =>
-              this.setState({
-                newContact: {
-                  ...this.state.newContact,
-                  comment: event.target.value
-                }
-              })
-            }
-          />
-        </div>
-        <div className="card-actions">
-          <button className="btn btn-primary" onClick={this.createContact}>
-            Save
-          </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => this.setState({ showCreateContact: false })}
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    );
-  };
-
-  dateStringFromTimestamp = timestamp => {
-    const date = new Date(timestamp);
-    return date.toISOString().substr(0, 10);
-  };
-
-  timeStringFromTimestamp = timestamp => {
-    const date = new Date(timestamp);
-    return (
-      this.paddTimeNumber(date.getHours().toString()) +
-      ':' +
-      this.paddTimeNumber(date.getMinutes().toString())
-    );
-  };
-
-  paddTimeNumber = number => {
-    return number.length < 2 ? '0' + number : number;
-  };
 }
-
-const imgUrl =
-  'https://media.licdn.com/dms/image/C5603AQHwSdySWFDuDQ/profile-displayphoto-shrink_200_200/0?e=1570665600&v=beta&t=06T-IUNJ-tRb5fHRCKPA5ADSnkXjsyiQLNlz8RntK7c';
 
 export default CompanyDetails;

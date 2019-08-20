@@ -6,3 +6,6 @@ export const statuses = [
   { id: 5, status: '5. KLART' },
   { id: 6, status: 'NEJ' }
 ];
+
+export const imgUrl =
+  'https://media.licdn.com/dms/image/C5603AQHwSdySWFDuDQ/profile-displayphoto-shrink_200_200/0?e=1570665600&v=beta&t=06T-IUNJ-tRb5fHRCKPA5ADSnkXjsyiQLNlz8RntK7c';

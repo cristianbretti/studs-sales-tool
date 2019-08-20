@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { companiesApi, membersApi, addCompanyApi } from '../api';
-import { statuses } from '../constants';
+import { companiesApi, membersApi, addCompanyApi } from '../utils/api';
+import { statuses } from '../utils/constants';
 import { Link } from 'react-router-dom';
 
 class Companies extends Component {
