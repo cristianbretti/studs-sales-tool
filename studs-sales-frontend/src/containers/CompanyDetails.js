@@ -285,8 +285,8 @@ class CompanyDetails extends Component {
               </select>
             </div>
           </div>
-          <div className="body flex mb-8">
-            <div className="col-md-4 h-100">
+          <div className="body flex lg:flex-row flex-col mb-8 pl-4">
+            <div className="lg:w-1/4 max-w-full h-100">
               <div className="contact-cards-container">
                 {this.state.contacts.map(contactInfo =>
                   this.isContactBeingEdited(contactInfo) ? (
@@ -325,7 +325,7 @@ class CompanyDetails extends Component {
                 </div>
               </div>
             </div>
-            <div className="col-md-8">
+            <div className="lg:w-3/ lg:mt-0 mt-8 max-w-full">
               <div className="contact-cards-container">
                 <NewCommentCard createComment={this.createComment} />
                 {this.state.comments
