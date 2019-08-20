@@ -30,7 +30,7 @@ class Companies extends Component {
 
   getCompanies = async () => {
     try {
-      const companies = await companiesApi();
+      const companies = await companiesApi(this.props.location.search);
       this.setState({ companies }, this.filterResult);
     } catch (err) {
       console.error(err);

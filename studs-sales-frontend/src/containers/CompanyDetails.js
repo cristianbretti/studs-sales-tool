@@ -222,7 +222,7 @@ class CompanyDetails extends Component {
     return (
       <div className="text-center m-w-full m-h-full flex flex-col align-center justify-center min-w-15">
         <div className="bg-gray-700 w-100 text-5xl pt-4 pb-4 text-white">
-          <Link to={`/`}>
+          <Link to={`/companies`}>
             <i className="fas fa-long-arrow-alt-left absolute top-0 left-0 text-white pl-8 pt-8 hover:cursor-pointer hover:underline" />
           </Link>
           <div>{this.state.info.company_name}</div>

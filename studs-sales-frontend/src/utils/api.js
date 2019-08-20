@@ -1,5 +1,5 @@
-export const companiesApi = () => {
-  return fetch(`http://localhost:3005/api/companies`, {
+export const companiesApi = search => {
+  return fetch(`http://localhost:3005/api/companies${search}`, {
     headers: {
       'Content-Type': 'application/json'
     }

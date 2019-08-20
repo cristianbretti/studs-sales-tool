@@ -14,11 +14,30 @@ const COMPANIES_QUERY =
   'user.name AS responsible_name ' +
   'FROM company AS company ' +
   'LEFT JOIN user AS user ' +
-  'ON company.responsible_user = user.user_id;';
+  'ON company.responsible_user = user.user_id ' +
+  'WHERE 1=1 ';
 
 app.get('/api/companies', async (req, res) => {
-  results = await db.query(COMPANIES_QUERY);
-  res.send(results[0]);
+  let query = COMPANIES_QUERY;
+  var status = req.query.status;
+  var user = req.query.user;
+  let values = [];
+  if (status) {
+    query += 'AND company.status = ? ';
+    values.push(status);
+  }
+  if (user) {
+    console.log(user);
+    query += 'AND user.user_id = ? ';
+    values.push(user);
+  }
+
+  try {
+    results = await db.query(query, values);
+    res.send(results[0]);
+  } catch (err) {
+    console.error(err);
+  }
 });
 
 //---------//
