@@ -27,7 +27,6 @@ app.get('/api/companies', async (req, res) => {
     values.push(status);
   }
   if (user) {
-    console.log(user);
     query += 'AND user.user_id = ? ';
     values.push(user);
   }

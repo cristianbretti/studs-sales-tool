@@ -325,7 +325,7 @@ class CompanyDetails extends Component {
                 </div>
               </div>
             </div>
-            <div className="lg:w-3/ lg:mt-0 mt-8 max-w-full">
+            <div className="lg:w-3/4 lg:mt-0 mt-8 max-w-full">
               <div className="contact-cards-container">
                 <NewCommentCard createComment={this.createComment} />
                 {this.state.comments
