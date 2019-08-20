@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import './App.css';
+import '../App.css';
 import {
   companyInfoApi,
   companyContactsApi,
@@ -13,8 +13,8 @@ import {
   deleteCommentApi,
   addContactApi,
   deleteContactApi
-} from './api';
-import { statuses } from './constants';
+} from '../api';
+import { statuses } from '../constants';
 
 class CompanyDetails extends Component {
   constructor(props) {

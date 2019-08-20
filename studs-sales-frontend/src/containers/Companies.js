@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
-import { companiesApi, membersApi, addCompanyApi } from './api';
-import { statuses } from './constants';
+import '../App.css';
+import { companiesApi, membersApi, addCompanyApi } from '../api';
+import { statuses } from '../constants';
 import { Link } from 'react-router-dom';
 
 class Companies extends Component {
