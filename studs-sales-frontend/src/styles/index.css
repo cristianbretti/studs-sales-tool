@@ -1,0 +1,80 @@
+@tailwind base;
+
+@tailwind components;
+
+tr > th:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+@tailwind utilities;
+
+.body {
+  width: 100%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.btn {
+  @apply font-medium py-1 px-2 m-1;
+}
+
+.status-box {
+  background-clip: content-box;
+}
+
+.status-color-1 {
+  background-color: rgb(240, 146, 53);
+}
+
+.status-color-2 {
+  background-color: rgb(242, 169, 59);
+}
+
+.status-color-3 {
+  background-color: rgb(255, 255, 84);
+}
+
+.status-color-4 {
+  background-color: rgb(191, 253, 91);
+}
+
+.status-color-5 {
+  background-color: rgb(0, 255, 0);
+}
+
+.status-color-6 {
+  background-color: red;
+}
+
+.card-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5%;
+  flex: 1;
+}
+
+.card {
+  @apply shadow-lg;
+}
+
+.card-actions {
+  display: flex;
+  padding: 2%;
+  justify-content: center;
+}
+
+.profile-date-time-container {
+  @apply flex flex-col items-center mr-2 w-1/6;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  height: 50px;
+}

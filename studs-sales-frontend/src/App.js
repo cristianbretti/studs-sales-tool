@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Companies from './containers/Companies';
 import CompanyDetails from './containers/CompanyDetails';
-import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 class App extends Component {

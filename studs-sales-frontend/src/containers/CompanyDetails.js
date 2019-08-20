@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import '../App.css';
 import {
   companyInfoApi,
   companyContactsApi,
@@ -197,23 +196,23 @@ class CompanyDetails extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="header">
+      <div className="text-center m-w-full m-h-full flex flex-col align-center justify-center min-w-15">
+        <div className="bg-gray-700 w-100 text-5xl pt-4 pb-4 text-white">
           <Link to={`/`}>
-            <i className="fas fa-long-arrow-alt-left top-left" />
+            <i className="fas fa-long-arrow-alt-left absolute top-0 left-0 text-white pl-8 pt-8 hover:cursor-pointer hover:underline" />
           </Link>
           <div>{this.state.info.company_name}</div>
         </div>
-        <div className="body">
-          <div className="content status-container">
-            <div className="info-icon-container">
+        <div className="bg-white flex-1 w-100 flex flex-col items-center">
+          <div className="w-100 px-2 mb-8 flex justify-center">
+            <div className="flex justify-center items-end mr-4">
               {this.state.completedUpdating && (
-                <span className="icon">
+                <span className="text-2xl text-green-500">
                   <i className="fas fa-check" />{' '}
                 </span>
               )}
             </div>
-            <div>
+            <div className="mr-4">
               <label>Status</label>
               <select
                 className="form-control"
@@ -262,8 +261,8 @@ class CompanyDetails extends Component {
               </select>
             </div>
           </div>
-          <div className="content body-row">
-            <div className="col-md-4 contact-sidebar">
+          <div className="body flex mb-8">
+            <div className="col-md-4 h-100">
               <div className="contact-cards-container">
                 {this.state.contacts.map(contactInfo =>
                   this.renderContactCard(contactInfo)
@@ -273,7 +272,7 @@ class CompanyDetails extends Component {
                     this.renderCreateContactCard()}
                   {!this.state.showCreateContact && (
                     <button
-                      className="btn-primary"
+                      className="btn btn-primary"
                       onClick={() => this.setState({ showCreateContact: true })}
                     >
                       Lägg till kontaktperson
@@ -284,23 +283,26 @@ class CompanyDetails extends Component {
             </div>
             <div className="col-md-8">
               <div className="contact-cards-container">
-                <div className="comment-container">
+                <div className="flex w-100">
                   <div className="profile-date-time-container">
                     <img className="profile-pic" src={imgUrl} />
                   </div>
-                  <div className="card add-comment-card">
-                    <textarea
+                  <div className="card card-container">
+                    <input
+                      className="form-control m-4 w-auto"
                       value={this.state.newComment}
                       onChange={event => {
                         this.setState({ newComment: event.target.value });
                       }}
                     />
-                    <button
-                      className="btn-primary"
-                      onClick={this.createComment}
-                    >
-                      Add
-                    </button>
+                    <div className="card-actions">
+                      <button
+                        className="btn btn-primary"
+                        onClick={this.createComment}
+                      >
+                        Add
+                      </button>
+                    </div>
                   </div>
                 </div>
                 {this.state.comments
@@ -327,30 +329,28 @@ class CompanyDetails extends Component {
 
   renderStaticCommentCard = comment => {
     return (
-      <div className="comment-container">
+      <div className="flex w-100">
         <div className="profile-date-time-container">
           <img className="profile-pic" src={imgUrl} />
-          <div className="comment-date">
+          <div className="text-sm">
             {this.dateStringFromTimestamp(comment.timestamp)}
           </div>
-          <div className="comment-time">
+          <div className="text-xs">
             {this.timeStringFromTimestamp(comment.timestamp)}
           </div>
         </div>
         <div className="card card-container">
-          <div className="comment-card">
-            <div className="comment-text">{comment.text}</div>
-          </div>
+          <div className="flex-1 p-1 inline-block">{comment.text}</div>
           <div className="card-actions">
             <button
-              className="btn-primary"
+              className="btn btn-primary"
               onClick={() => this.startEditingComment(comment.id)}
             >
               Edit
             </button>
 
             <button
-              className="btn-danger"
+              className="btn btn-danger"
               onClick={() => this.deleteComment(comment.id)}
             >
               Delete
@@ -363,35 +363,33 @@ class CompanyDetails extends Component {
 
   renderEditCommentCard = comment => {
     return (
-      <div className="comment-container">
+      <div className="flex w-100">
         <div className="profile-date-time-container">
           <img className="profile-pic" src={imgUrl} />
-          <div className="comment-date">
+          <div className="text-sm">
             {this.dateStringFromTimestamp(comment.timestamp)}
           </div>
-          <div className="comment-time">
+          <div className="text-xs">
             {this.timeStringFromTimestamp(comment.timestamp)}
           </div>
         </div>
         <div className="card card-container">
-          <div className="comment-card">
-            <textarea
-              className="comment-text"
-              value={this.state.comments.find(c => c.id === comment.id).text}
-              onChange={event =>
-                this.changeCommentText(comment.id, event.target.value)
-              }
-            />
-          </div>
+          <input
+            className="form-control m-4 mt-0 w-auto"
+            value={this.state.comments.find(c => c.id === comment.id).text}
+            onChange={event =>
+              this.changeCommentText(comment.id, event.target.value)
+            }
+          />
           <div className="card-actions">
             <button
-              className="btn-primary"
+              className="btn btn-primary"
               onClick={() => this.saveNewComment(comment.id)}
             >
               Save
             </button>
             <button
-              className="btn-danger"
+              className="btn btn-danger"
               onClick={() => this.cancelEditingComment(comment.id)}
             >
               Cancel
@@ -405,24 +403,24 @@ class CompanyDetails extends Component {
   renderContactCard(contactInfo) {
     return (
       <div className="card card-container">
-        <div className="contact-card">
-          <div className="contact-info">
-            <div className="contact-text">
+        <div className="p-2 flex flex-col justify-start items-start">
+          <div className="flex flex-col w-100">
+            <div className="text-left ml-1">
               <b>Namn:</b> {contactInfo.name}
             </div>
-            <div className="contact-text">
+            <div className="text-left ml-1">
               <b>Nummer</b> {contactInfo.phone_number}
             </div>
-            <div className="contact-text">
+            <div className="text-left ml-1">
               <b>Mejl:</b> {contactInfo.email}
             </div>
           </div>
-          <div className="contact-comment">{contactInfo.comment}</div>
+          <div className="text-left pt-2">{contactInfo.comment}</div>
         </div>
         <div className="card-actions">
-          <button className="btn-primary">Edit</button>
+          <button className="btn btn-primary">Edit</button>
           <button
-            className="btn-danger"
+            className="btn btn-danger"
             onClick={() => this.deleteContact(contactInfo.id)}
           >
             Delete
@@ -435,7 +433,7 @@ class CompanyDetails extends Component {
   renderCreateContactCard = () => {
     return (
       <div className="card">
-        <div className="contact-card create-contact-inputs-container">
+        <div className="contact-card flex flex-col items-start mx-4">
           <label>Namn</label>
           <input
             type="text"
@@ -494,11 +492,11 @@ class CompanyDetails extends Component {
           />
         </div>
         <div className="card-actions">
-          <button className="btn-primary" onClick={this.createContact}>
+          <button className="btn btn-primary" onClick={this.createContact}>
             Save
           </button>
           <button
-            className="btn-danger"
+            className="btn btn-danger"
             onClick={() => this.setState({ showCreateContact: false })}
           >
             Cancel

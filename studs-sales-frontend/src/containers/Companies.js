@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../App.css';
 import { companiesApi, membersApi, addCompanyApi } from '../api';
 import { statuses } from '../constants';
 import { Link } from 'react-router-dom';
@@ -144,11 +143,13 @@ class Companies extends Component {
   render() {
     console.log('rerender');
     return (
-      <div className="App">
-        <div className="header">Företag</div>
-        <div className="body">
-          <div className="content filter-container">
-            <div className="form-group">
+      <div className="text-center m-w-full m-h-full flex flex-col items-center justify-center">
+        <div className="bg-gray-700 w-100 text-5xl pt-4 pb-4 text-white">
+          Företag
+        </div>
+        <div className="bg-white flex-1 w-100 flex flex-col items-center">
+          <div className="body flex justify-center">
+            <div className="form-group mr-2">
               <label>Företag</label>
               <input
                 type="text"
@@ -162,7 +163,7 @@ class Companies extends Component {
                 }}
               />
             </div>
-            <div>
+            <div className="mr-2">
               <label>Status</label>
               <select
                 className="form-control"
@@ -183,7 +184,7 @@ class Companies extends Component {
                 ))}
               </select>
             </div>
-            <div>
+            <div className="mr-2">
               <label>Ansvarig</label>
               <select
                 className="form-control"
@@ -208,15 +209,18 @@ class Companies extends Component {
           <div>
             Visar <b>{this.state.filteredCompanies.length}</b> företag
           </div>
-          <button
-            className="btn-primary"
-            onClick={() => this.setState({ showAddNew: true })}
-          >
-            Lägg till ny
-          </button>
+          {!this.state.showAddNew && (
+            <button
+              className="btn btn-primary"
+              onClick={() => this.setState({ showAddNew: true })}
+            >
+              Lägg till ny
+            </button>
+          )}
+
           {this.state.showAddNew && this.renderAddNewInput()}
 
-          <div className="content table-container">
+          <div className="body mt-2">
             <table className="table table-striped">
               <thead className="thead-dark">
                 <tr>
@@ -263,7 +267,7 @@ class Companies extends Component {
         <td>
           <Link to={`companies/${id}`}>{company_name}</Link>
         </td>
-        <td className={`status status-color-${statusColorId}`}>{status}</td>
+        <td className={`status-box status-color-${statusColorId}`}>{status}</td>
         <td>{responsible_name}</td>
       </tr>
     );
@@ -275,8 +279,8 @@ class Companies extends Component {
 
   renderAddNewInput = () => {
     return (
-      <div className="content add-new-container">
-        <div className="form-group">
+      <div className="body flex flex-column justify-center items-center mb-4">
+        <div className="mb-2 w-2/5">
           <label>Företag</label>
           <input
             type="text"
@@ -288,14 +292,17 @@ class Companies extends Component {
             }
           />
         </div>
-        <div className="add-new-buttons-container">
+        <div className="flex justify-center">
           <button
-            className="btn-secondary"
+            className="btn btn-secondary"
             onClick={() => this.setState({ showAddNew: false })}
           >
             Avbryt
           </button>
-          <button className="btn-primary" onClick={() => this.addNewCompany()}>
+          <button
+            className="btn btn-primary whitespace-no-wrap"
+            onClick={() => this.addNewCompany()}
+          >
             Lägg till
           </button>
         </div>
