@@ -232,7 +232,7 @@ class CompanyDetails extends Component {
           </div>
           <div>{this.state.info.company_name}</div>
         </div>
-        <div className="bg-white flex-1 w-100 flex flex-col items-center">
+        <div className="bg-white flex-1 w-100 flex flex-col items-center text-xs md:text-base">
           <div className="w-100 px-2 mb-8 flex justify-center">
             <div className="flex justify-center items-end mr-4">
               {this.state.completedUpdating && (
@@ -290,68 +290,58 @@ class CompanyDetails extends Component {
               </select>
             </div>
           </div>
-          <div className="body flex lg:flex-row flex-col mb-8 pl-4">
-            <div className="lg:w-1/4 max-w-full h-100">
-              <div className="contact-cards-container">
-                {this.state.contacts.map(contactInfo =>
-                  this.isContactBeingEdited(contactInfo) ? (
-                    <CreateContactCard
-                      contactInfo={contactInfo}
-                      saveContact={body =>
-                        this.saveContact(contactInfo.id, body)
-                      }
-                      hideCard={() => this.cancelEditingContact(contactInfo.id)}
+          <div className="body flex md:flex-row flex-col mb-8 pl-4">
+            <div className="h-100">
+              {this.state.contacts.map(contactInfo =>
+                this.isContactBeingEdited(contactInfo) ? (
+                  <CreateContactCard
+                    contactInfo={contactInfo}
+                    saveContact={body => this.saveContact(contactInfo.id, body)}
+                    hideCard={() => this.cancelEditingContact(contactInfo.id)}
+                  />
+                ) : (
+                  <StaticContactCard
+                    contactInfo={contactInfo}
+                    deleteContact={this.deleteContact}
+                    startEditingContact={this.startEditingContact}
+                  />
+                )
+              )}
+              {this.state.showCreateContact && (
+                <CreateContactCard
+                  saveContact={this.createContact}
+                  hideCard={() => this.setState({ showCreateContact: false })}
+                />
+              )}
+              {!this.state.showCreateContact && (
+                <button
+                  className="btn-sm md:btn-md btn-primary"
+                  onClick={() => this.setState({ showCreateContact: true })}
+                >
+                  Lägg till kontaktperson
+                </button>
+              )}
+            </div>
+            <div className="md:flex-1 md:ml-4 md:mt-0 mt-8 max-w-full">
+              <NewCommentCard createComment={this.createComment} />
+              {this.state.comments
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .map(comment =>
+                  this.isCommentBeingEdited(comment) ? (
+                    <EditCommentCard
+                      comment={comment}
+                      changeCommentText={this.changeCommentText}
+                      saveNewComment={this.saveNewComment}
+                      cancelEditingComment={this.cancelEditingComment}
                     />
                   ) : (
-                    <StaticContactCard
-                      contactInfo={contactInfo}
-                      deleteContact={this.deleteContact}
-                      startEditingContact={this.startEditingContact}
+                    <StaticCommentCard
+                      comment={comment}
+                      startEditingComment={this.startEditingComment}
+                      deleteComment={this.deleteComment}
                     />
                   )
                 )}
-                <div>
-                  {this.state.showCreateContact && (
-                    <CreateContactCard
-                      saveContact={this.createContact}
-                      hideCard={() =>
-                        this.setState({ showCreateContact: false })
-                      }
-                    />
-                  )}
-                  {!this.state.showCreateContact && (
-                    <button
-                      className="btn btn-primary"
-                      onClick={() => this.setState({ showCreateContact: true })}
-                    >
-                      Lägg till kontaktperson
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>
-            <div className="lg:w-3/4 lg:mt-0 mt-8 max-w-full">
-              <div className="contact-cards-container">
-                <NewCommentCard createComment={this.createComment} />
-                {this.state.comments
-                  .sort((a, b) => b.timestamp - a.timestamp)
-                  .map(comment =>
-                    this.isCommentBeingEdited(comment) ? (
-                      <EditCommentCard
-                        comment={comment}
-                        changeCommentText={this.changeCommentText}
-                        saveNewComment={this.saveNewComment}
-                        cancelEditingComment={this.cancelEditingComment}
-                      />
-                    ) : (
-                      <StaticCommentCard
-                        comment={comment}
-                        startEditingComment={this.startEditingComment}
-                        deleteComment={this.deleteComment}
-                      />
-                    )
-                  )}
-              </div>
             </div>
           </div>
         </div>

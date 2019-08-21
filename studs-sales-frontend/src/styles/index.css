@@ -21,8 +21,14 @@ label {
   padding-right: 10%;
 }
 
-.btn {
-  @apply font-medium py-1 px-2 m-1;
+@responsive {
+  .btn-md {
+    @apply text-base font-medium py-1 px-2 m-1;
+  }
+
+  .btn-sm {
+    @apply text-xs font-medium py-1 px-2 m-1;
+  }
 }
 
 .status-box {
@@ -75,7 +81,7 @@ label {
 }
 
 .profile-date-time-container {
-  @apply flex flex-col items-center mr-2 w-1/6;
+  @apply flex flex-col items-center mr-4 w-20;
 }
 
 .profile-pic {

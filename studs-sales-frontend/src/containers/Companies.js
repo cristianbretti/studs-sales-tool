@@ -210,7 +210,7 @@ class Companies extends Component {
           </div>
           {!this.state.showAddNew && (
             <button
-              className="btn btn-primary"
+              className="btn-sm md:btn-md btn-primary"
               onClick={() => this.setState({ showAddNew: true })}
             >
               Lägg till ny
@@ -293,13 +293,13 @@ class Companies extends Component {
         </div>
         <div className="flex justify-center">
           <button
-            className="btn btn-secondary"
+            className="btn-sm md:btn-md btn-secondary"
             onClick={() => this.setState({ showAddNew: false })}
           >
             Avbryt
           </button>
           <button
-            className="btn btn-primary whitespace-no-wrap"
+            className="btn-sm md:btn-md btn-primary whitespace-no-wrap"
             onClick={() => this.addNewCompany()}
           >
             Lägg till

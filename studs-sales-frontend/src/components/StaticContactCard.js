@@ -23,13 +23,13 @@ export const StaticContactCard = ({
       </div>
       <div className="card-actions">
         <button
-          className="btn btn-primary"
+          className="btn-sm md:btn-md  btn-primary"
           onClick={() => startEditingContact(contactInfo.id)}
         >
           Edit
         </button>
         <button
-          className="btn btn-danger"
+          className="btn-sm md:btn-md btn-danger"
           onClick={() => deleteContact(contactInfo.id)}
         >
           Delete

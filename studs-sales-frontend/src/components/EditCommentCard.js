@@ -31,13 +31,13 @@ export const EditCommentCard = ({
         />
         <div className="card-actions">
           <button
-            className="btn btn-primary"
+            className="btn-sm md:btn-md btn-primary"
             onClick={() => saveNewComment(comment.id, text)}
           >
             Save
           </button>
           <button
-            className="btn btn-danger"
+            className="btn-sm md:btn-md btn-danger"
             onClick={() => cancelEditingComment(comment.id)}
           >
             Cancel

@@ -43,12 +43,15 @@ export const CreateContactCard = ({ contactInfo, saveContact, hideCard }) => {
       </div>
       <div className="card-actions">
         <button
-          className="btn btn-primary"
+          className="btn-small md:btn-medium btn-primary"
           onClick={() => saveContact({ name, phone_number, email, comment })}
         >
           Save
         </button>
-        <button className="btn btn-danger" onClick={() => hideCard()}>
+        <button
+          className="btn-sm md:btn-md btn-danger"
+          onClick={() => hideCard()}
+        >
           Cancel
         </button>
       </div>

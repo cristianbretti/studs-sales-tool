@@ -26,14 +26,14 @@ export const StaticCommentCard = ({
         <div className="flex-1 p-1 inline-block">{comment.text}</div>
         <div className="card-actions">
           <button
-            className="btn btn-primary"
+            className="btn-sm md:btn-md btn-primary"
             onClick={() => startEditingComment(comment.id)}
           >
             Edit
           </button>
 
           <button
-            className="btn btn-danger"
+            className="btn-sm md:btn-md btn-danger"
             onClick={() => deleteComment(comment.id)}
           >
             Delete
