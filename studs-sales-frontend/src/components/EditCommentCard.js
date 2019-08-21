@@ -4,7 +4,7 @@ import {
   timeStringFromTimestamp
 } from '../utils/utils';
 
-import { imgUrl } from '../utils/constants';
+import { ProfilePicture } from '.';
 
 export const EditCommentCard = ({
   comment,
@@ -15,7 +15,7 @@ export const EditCommentCard = ({
   return (
     <div className="flex w-100">
       <div className="profile-date-time-container">
-        <img className="profile-pic" src={imgUrl} />
+        <ProfilePicture user_id={comment.user_id} />
         <div className="text-sm">
           {dateStringFromTimestamp(comment.timestamp)}
         </div>

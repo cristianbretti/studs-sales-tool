@@ -3,10 +3,13 @@ import { EditCommentCard } from './EditCommentCard';
 import { CreateContactCard } from './CreateContactCard';
 import { NewCommentCard } from './NewCommentCard';
 import { StaticContactCard } from './StaticContactCard';
+import { ProfilePicture } from './ProfilePicture';
+
 export {
   StaticCommentCard,
   EditCommentCard,
   CreateContactCard,
   NewCommentCard,
-  StaticContactCard
+  StaticContactCard,
+  ProfilePicture
 };

@@ -1,10 +1,4 @@
 import React from 'react';
-import {
-  dateStringFromTimestamp,
-  timeStringFromTimestamp
-} from '../utils/utils';
-
-import { imgUrl } from '../utils/constants';
 
 export const StaticContactCard = ({
   contactInfo,

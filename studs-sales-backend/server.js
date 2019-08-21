@@ -2,7 +2,7 @@ var db = require('./db.js');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-app.use(cors(), express.json());
+app.use(cors(), express.json(), express.static('static'));
 
 const port = 3005;
 //---------//
@@ -171,6 +171,7 @@ const COMMENTS_QUERY =
   'comment.comment_id AS id, ' +
   'comment.text AS text, ' +
   'comment.timestamp AS timestamp, ' +
+  'user.user_id AS user_id, ' +
   'user.name AS name ' +
   'FROM comment AS comment ' +
   'JOIN company AS company ' +

@@ -141,7 +141,6 @@ class Companies extends Component {
   };
 
   render() {
-    console.log('rerender');
     return (
       <div className="text-center m-w-full m-h-full flex flex-col items-center justify-center">
         <div className="bg-gray-700 w-100 text-5xl pt-4 pb-4 text-white">
