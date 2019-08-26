@@ -273,7 +273,8 @@ class Companies extends Component {
   }
 
   getStatusColorFromStatusName = status => {
-    return statuses.find(s => s.status === status).id;
+    const statusForCompany = statuses.find(s => s.status === status);
+    return statusForCompany ? statusForCompany.id : 0;
   };
 
   renderAddNewInput = () => {
