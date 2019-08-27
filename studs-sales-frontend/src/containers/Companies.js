@@ -126,6 +126,22 @@ class Companies extends Component {
 
   applySortStatus = () => {
     const { property, direction } = this.state.sortStatus;
+    switch (property) {
+      case 'company_name':
+        this.sortByStringProperty(property, direction);
+        break;
+      case 'responsible_name':
+        this.sortByStringProperty(property, direction);
+        break;
+      case 'status':
+        this.sortByStatus(direction);
+        break;
+      default:
+        throw new RangeError('Wrong sort status direction');
+    }
+  };
+
+  sortByStringProperty = (property, direction) => {
     let sortedList = [];
     if (direction === 'ASC') {
       sortedList = this.state.filteredCompanies.sort(
@@ -134,20 +150,57 @@ class Companies extends Component {
           +(a[property] > b[property]) ||
           -(a[property] < b[property])
       );
-    } else if (direction === 'DESC') {
+    } else {
       sortedList = this.state.filteredCompanies.sort(
         (a, b) =>
           (a[property] === null) - (b[property] === null) ||
           -(a[property] > b[property]) ||
           +(a[property] < b[property])
       );
-    } else {
-      //default sort by id
-      sortedList = this.state.filteredCompanies.sort((a, b) =>
-        a.id > b.id ? 1 : b.id > a.id ? -1 : 0
-      );
     }
     this.setState({ filteredCompanies: sortedList });
+  };
+
+  sortByStatus = direction => {
+    let sortedList = [];
+    if (direction === 'ASC') {
+      sortedList = this.state.filteredCompanies.sort((a, b) => {
+        if (
+          this.getStatusIdByStatusName(a.status) >
+          this.getStatusIdByStatusName(b.status)
+        ) {
+          return 1;
+        } else if (
+          this.getStatusIdByStatusName(a.status) <
+          this.getStatusIdByStatusName(b.status)
+        ) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+    } else {
+      sortedList = this.state.filteredCompanies.sort((a, b) => {
+        if (
+          this.getStatusIdByStatusName(a.status) >
+          this.getStatusIdByStatusName(b.status)
+        ) {
+          return -1;
+        } else if (
+          this.getStatusIdByStatusName(a.status) <
+          this.getStatusIdByStatusName(b.status)
+        ) {
+          return 1;
+        } else {
+          return 0;
+        }
+      });
+    }
+    this.setState({ filteredCompanies: sortedList });
+  };
+
+  getStatusIdByStatusName = name => {
+    return this.state.statuses.find(s => s.status === name).id;
   };
 
   render() {
