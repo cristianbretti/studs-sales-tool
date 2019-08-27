@@ -4,6 +4,7 @@ import { CreateContactCard } from './CreateContactCard';
 import { NewCommentCard } from './NewCommentCard';
 import { StaticContactCard } from './StaticContactCard';
 import { ProfilePicture } from './ProfilePicture';
+import { HeaderSortButton } from './HeaderSortButton';
 
 export {
   StaticCommentCard,
@@ -11,5 +12,6 @@ export {
   CreateContactCard,
   NewCommentCard,
   StaticContactCard,
-  ProfilePicture
+  ProfilePicture,
+  HeaderSortButton
 };

@@ -6,6 +6,7 @@ import {
   addCompanyApi
 } from '../utils/api';
 import { Link } from 'react-router-dom';
+import { HeaderSortButton } from '../components';
 
 class Companies extends Component {
   constructor(props) {
@@ -107,12 +108,6 @@ class Companies extends Component {
           );
           break;
         case 'DESC':
-          this.setState(
-            { sortStatus: { property, direction: 'NONE' } },
-            this.applySortStatus
-          );
-          break;
-        case 'NONE':
           this.setState(
             { sortStatus: { property, direction: 'ASC' } },
             this.applySortStatus
@@ -238,27 +233,24 @@ class Companies extends Component {
             <table className="table table-striped">
               <thead className="thead-dark">
                 <tr>
-                  <th
-                    onClick={() => {
-                      this.setSortStatus('company_name');
-                    }}
-                  >
-                    Företag
-                  </th>
-                  <th
-                    onClick={() => {
-                      this.setSortStatus('status');
-                    }}
-                  >
-                    Status
-                  </th>
-                  <th
-                    onClick={() => {
-                      this.setSortStatus('responsible_name');
-                    }}
-                  >
-                    Ansvarig
-                  </th>
+                  <HeaderSortButton
+                    text="Företag"
+                    attribute="company_name"
+                    setSortStatus={this.setSortStatus}
+                    sortStatus={this.state.sortStatus}
+                  />
+                  <HeaderSortButton
+                    text="Status"
+                    attribute="status"
+                    setSortStatus={this.setSortStatus}
+                    sortStatus={this.state.sortStatus}
+                  />
+                  <HeaderSortButton
+                    text="Ansvarig"
+                    attribute="responsible_name"
+                    setSortStatus={this.setSortStatus}
+                    sortStatus={this.state.sortStatus}
+                  />
                 </tr>
               </thead>
               <tbody>
