@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
-import { companiesApi, membersApi, addCompanyApi } from '../utils/api';
-import { statuses } from '../utils/constants';
+import {
+  statusesApi,
+  companiesApi,
+  membersApi,
+  addCompanyApi
+} from '../utils/api';
 import { Link } from 'react-router-dom';
 
 class Companies extends Component {
@@ -10,6 +14,7 @@ class Companies extends Component {
       companies: [],
       filteredCompanies: [],
       users: [],
+      statuses: [],
       showAddNew: false,
       newCompanyName: '',
       filterText: '',
@@ -25,6 +30,7 @@ class Companies extends Component {
   componentDidMount() {
     this.getCompanies();
     this.getMembers();
+    this.getStatuses();
     document.title = 'STUDS | Alla företag';
   }
 
@@ -41,6 +47,15 @@ class Companies extends Component {
     try {
       const { users } = await membersApi();
       this.setState({ users });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  getStatuses = async () => {
+    try {
+      const { statuses } = await statusesApi();
+      this.setState({ statuses });
     } catch (err) {
       console.log(err);
     }
@@ -176,7 +191,7 @@ class Companies extends Component {
                 }
               >
                 <option value="Alla">Alla</option>
-                {statuses.map(status => (
+                {this.state.statuses.map(status => (
                   <option key={status.id} value={status.status}>
                     {status.status}
                   </option>
@@ -273,7 +288,7 @@ class Companies extends Component {
   }
 
   getStatusColorFromStatusName = status => {
-    const statusForCompany = statuses.find(s => s.status === status);
+    const statusForCompany = this.state.statuses.find(s => s.status === status);
     return statusForCompany ? statusForCompany.id : 0;
   };
 

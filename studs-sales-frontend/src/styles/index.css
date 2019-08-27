@@ -36,30 +36,38 @@ label {
 }
 
 .status-color-1 {
-  background-color: rgb(240, 146, 53);
+  background-color: rgb(227, 102, 58);
 }
 
 .status-color-2 {
-  background-color: rgb(245, 185, 19);
+  background-color: rgb(226, 152, 57);
 }
 
 .status-color-3 {
-  background-color: rgb(242, 169, 59);
+  background-color: rgb(245, 194, 68);
 }
 
 .status-color-4 {
-  background-color: rgb(255, 255, 84);
+  background-color: rgb(253, 242, 81);
 }
 
 .status-color-5 {
-  background-color: rgb(191, 253, 91);
+  background-color: rgb(216, 228, 77);
 }
 
 .status-color-6 {
-  background-color: rgb(0, 255, 0);
+  background-color: rgb(178, 216, 70);
 }
 
 .status-color-7 {
+  background-color: rgb(114, 190, 76);
+}
+
+.status-color-8 {
+  background-color: rgb(71, 156, 87);
+}
+
+.status-color--1 {
   background-color: red;
 }
 

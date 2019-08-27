@@ -5,16 +5,35 @@ const app = express();
 app.use(cors(), express.json(), express.static('static'));
 
 const port = 3005;
+
+//---------//
+const STATUS_QUERY = 'SELECT status_id AS id, status FROM status;';
+
+app.get('/api/statuses', async (req, res) => {
+  let query = STATUS_QUERY;
+
+  try {
+    statusesResults = await db.query(query);
+    const statuses = statusesResults[0];
+    const response = {
+      statuses
+    };
+    res.send(response);
+  } catch (err) {
+    console.error(err);
+  }
+});
+
 //---------//
 const COMPANIES_QUERY =
   'SELECT ' +
   'company.company_id AS id, ' +
   'company.name AS company_name, ' +
-  'company.status, ' +
+  'status.status, ' +
   'user.name AS responsible_name ' +
   'FROM company AS company ' +
-  'LEFT JOIN user AS user ' +
-  'ON company.responsible_user = user.user_id ' +
+  'LEFT JOIN user AS user ON company.responsible_user = user.user_id ' +
+  'LEFT JOIN status AS status ON company.status = status.status_id ' +
   'WHERE 1=1 ';
 
 app.get('/api/companies', async (req, res) => {

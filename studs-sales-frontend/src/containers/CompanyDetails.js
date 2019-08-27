@@ -6,6 +6,7 @@ import {
   companyContactsApi,
   companyCommentsApi,
   membersApi,
+  statusesApi,
   updateCompanyApi,
   addCommentApi,
   updateCommentApi,
@@ -14,7 +15,6 @@ import {
   deleteContactApi,
   updateContactApi
 } from '../utils/api';
-import { statuses } from '../utils/constants';
 
 import {
   StaticCommentCard,
@@ -30,6 +30,7 @@ class CompanyDetails extends Component {
     this.state = {
       companyId: props.match.params.id,
       users: [],
+      statuses: [],
       info: {},
       contacts: [],
       comments: [],
@@ -43,6 +44,7 @@ class CompanyDetails extends Component {
   componentDidMount = () => {
     this.getAllInfo();
     this.getMembers();
+    this.getStatuses();
   };
 
   getAllInfo = async () => {
@@ -71,6 +73,15 @@ class CompanyDetails extends Component {
     try {
       const { users } = await membersApi();
       this.setState({ users });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  getStatuses = async () => {
+    try {
+      const { statuses } = await statusesApi();
+      this.setState({ statuses });
     } catch (err) {
       console.log(err);
     }
@@ -256,8 +267,8 @@ class CompanyDetails extends Component {
                   )
                 }
               >
-                {statuses.map(status => (
-                  <option>{status.status}</option>
+                {this.state.statuses.map(status => (
+                  <option value={status.id}>{status.status}</option>
                 ))}
               </select>
             </div>

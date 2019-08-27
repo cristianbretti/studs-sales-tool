@@ -1,3 +1,17 @@
+export const statusesApi = () => {
+  return fetch(`http://localhost:3005/api/statuses`, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(resp => {
+    if (resp.ok) {
+      return resp.json();
+    } else {
+      console.log(resp);
+    }
+  });
+};
+
 export const companiesApi = search => {
   return fetch(`http://localhost:3005/api/companies${search}`, {
     headers: {
