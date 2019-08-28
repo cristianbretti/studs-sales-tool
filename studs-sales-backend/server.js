@@ -242,8 +242,12 @@ app.put('/api/companies/:id', async (req, res) => {
   }
 
   if (responsible_user) {
-    query += 'responsible_user = ?';
-    values.push(responsible_user);
+    if (responsible_user == 0) {
+      query += 'responsible_user = NULL';
+    } else {
+      query += 'responsible_user = ?';
+      values.push(responsible_user);
+    }
   }
 
   query += ' WHERE company.company_id = ?';
