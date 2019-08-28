@@ -65,9 +65,6 @@ class CompanyDetails extends Component {
   };
 
   updateCompany = async () => {
-    if (this.state.info.responsible_user === 0) {
-      return;
-    }
     try {
       const wasUpdated = await updateCompanyApi({
         id: this.state.companyId,
@@ -212,7 +209,7 @@ class CompanyDetails extends Component {
         <div className="bg-gray-700 w-100 text-5xl pt-4 pb-4 text-white">
           <div>
             <i
-              className="fas fa-long-arrow-alt-left absolute top-0 left-0 text-white pl-8 pt-8 hover:cursor-pointer hover:underline"
+              className="fas fa-long-arrow-alt-left absolute top-0 left-0 text-white pl-8 pt-8 cursor-pointer hover:underline"
               onClick={() => {
                 this.props.back();
               }}

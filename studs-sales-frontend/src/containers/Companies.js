@@ -304,6 +304,7 @@ class Companies extends Component {
     return (
       <tr key={id}>
         <td
+          className="cursor-pointer hover:font-bold hover:underline"
           onClick={() => {
             this.props.history.push({ pathname: '/empty' });
             this.props.history.replace({ pathname: `/companies/${id}` });
