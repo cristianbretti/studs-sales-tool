@@ -213,23 +213,42 @@ app.get('/api/companies/:id/comments', async (req, res) => {
 
 //---------//
 
-const UPDATE_COMPANY_QUERY =
-  'UPDATE company ' +
-  'SET ' +
-  'status = ?, ' +
-  'responsible_user = ? ' +
-  'WHERE company.company_id = ?';
+const UPDATE_COMPANY_QUERY = 'UPDATE company ' + 'SET ';
+// 'status = ?, ' +
+// 'responsible_user = ? ' +
+// 'WHERE company.company_id = ?';
 
 app.put('/api/companies/:id', async (req, res) => {
   const id = req.params.id;
   const status = req.body.status;
   const responsible_user = req.body.responsible_user;
 
-  const results = await db.query(UPDATE_COMPANY_QUERY, [
-    status,
-    responsible_user,
-    id
-  ]);
+  let query = UPDATE_COMPANY_QUERY;
+  let values = [];
+
+  if (!status && !responsible_user) {
+    res.sendStatus(400);
+    return;
+  }
+
+  if (status) {
+    query += 'status = ?';
+    values.push(status);
+  }
+
+  if (status && responsible_user) {
+    query += ',';
+  }
+
+  if (responsible_user) {
+    query += 'responsible_user = ?';
+    values.push(responsible_user);
+  }
+
+  query += ' WHERE company.company_id = ?';
+  values.push(id);
+
+  const results = await db.query(query, values);
   res.sendStatus(200);
 });
 
