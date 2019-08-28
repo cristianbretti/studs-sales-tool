@@ -27,31 +27,14 @@ app.get('/api/statuses', async (req, res) => {
 //---------//
 const COMPANIES_QUERY =
   'SELECT ' +
-  'company.company_id AS id, ' +
-  'company.name AS company_name, ' +
-  'status.status, ' +
-  'user.name AS responsible_name ' +
-  'FROM company AS company ' +
-  'LEFT JOIN user AS user ON company.responsible_user = user.user_id ' +
-  'LEFT JOIN status AS status ON company.status = status.status_id ' +
-  'WHERE 1=1 ';
-
+  'company_id AS id, ' +
+  'name, ' +
+  'status, ' +
+  'responsible_user AS user_id ' +
+  'FROM company';
 app.get('/api/companies', async (req, res) => {
-  let query = COMPANIES_QUERY;
-  var status = req.query.status;
-  var user = req.query.user;
-  let values = [];
-  if (status) {
-    query += 'AND company.status = ? ';
-    values.push(status);
-  }
-  if (user) {
-    query += 'AND user.user_id = ? ';
-    values.push(user);
-  }
-
   try {
-    results = await db.query(query, values);
+    results = await db.query(COMPANIES_QUERY);
     res.send(results[0]);
   } catch (err) {
     console.error(err);
@@ -92,6 +75,24 @@ app.get('/api/companies/:id/info', async (req, res) => {
   };
 
   res.send(response);
+});
+
+//---------//
+
+//---------//
+
+const COMPANY_STATUS_QUERY =
+  'SELECT ' +
+  'company.status ' +
+  'FROM company ' +
+  'WHERE company.company_id = ? ';
+
+app.get('/api/companies/:id/status', async (req, res) => {
+  const id = req.params.id;
+  const status_results = await db.query(COMPANY_STATUS_QUERY, id);
+  const status = status_results[0][0];
+
+  res.send(status);
 });
 
 //---------//

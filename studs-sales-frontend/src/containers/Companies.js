@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
-import {
-  statusesApi,
-  companiesApi,
-  membersApi,
-  addCompanyApi
-} from '../utils/api';
-import { Link } from 'react-router-dom';
+import { companiesApi, addCompanyApi } from '../utils/api';
 import { HeaderSortButton } from '../components';
+import CompanyDetails from './CompanyDetails';
 
 class Companies extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      renderCompanyDetails: false,
       companies: [],
       filteredCompanies: [],
       users: [],
@@ -22,43 +18,26 @@ class Companies extends Component {
       filterUser: 'Alla',
       filterStatus: 'Alla',
       sortStatus: {
-        property: 'company_name',
-        direction: 'DESC'
+        property: 'name',
+        direction: 'ASC'
       }
     };
   }
 
   componentDidMount() {
+    if (this.props.match.params.id) {
+      this.setState({ renderCompanyDetails: true });
+    }
     this.getCompanies();
-    this.getMembers();
-    this.getStatuses();
     document.title = 'STUDS | Alla företag';
   }
 
   getCompanies = async () => {
     try {
-      const companies = await companiesApi(this.props.location.search);
+      const companies = await companiesApi();
       this.setState({ companies }, this.filterResult);
     } catch (err) {
       console.error(err);
-    }
-  };
-
-  getMembers = async () => {
-    try {
-      const { users } = await membersApi();
-      this.setState({ users });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  getStatuses = async () => {
-    try {
-      const { statuses } = await statusesApi();
-      this.setState({ statuses });
-    } catch (err) {
-      console.log(err);
     }
   };
 
@@ -79,19 +58,19 @@ class Companies extends Component {
       {
         filteredCompanies: this.state.companies
           .filter(company =>
-            company.company_name
+            company.name
               .toLowerCase()
               .includes(this.state.filterText.toLowerCase())
           )
           .filter(company =>
             this.state.filterStatus === 'Alla'
               ? 1
-              : company.status === this.state.filterStatus
+              : company.status == this.state.filterStatus
           )
           .filter(company =>
             this.state.filterUser === 'Alla'
               ? 1
-              : company.responsible_name === this.state.filterUser
+              : company.user_id == this.state.filterUser
           )
       },
       this.applySortStatus
@@ -127,17 +106,17 @@ class Companies extends Component {
   applySortStatus = () => {
     const { property, direction } = this.state.sortStatus;
     switch (property) {
-      case 'company_name':
+      case 'name':
         this.sortByStringProperty(property, direction);
         break;
-      case 'responsible_name':
+      case 'user_id':
         this.sortByStringProperty(property, direction);
         break;
       case 'status':
         this.sortByStatus(direction);
         break;
       default:
-        throw new RangeError('Wrong sort status direction');
+        throw new RangeError('Wrong sort property');
     }
   };
 
@@ -165,15 +144,9 @@ class Companies extends Component {
     let sortedList = [];
     if (direction === 'ASC') {
       sortedList = this.state.filteredCompanies.sort((a, b) => {
-        if (
-          this.getStatusIdByStatusName(a.status) >
-          this.getStatusIdByStatusName(b.status)
-        ) {
+        if (a.status > b.status) {
           return 1;
-        } else if (
-          this.getStatusIdByStatusName(a.status) <
-          this.getStatusIdByStatusName(b.status)
-        ) {
+        } else if (a.status < b.status) {
           return -1;
         } else {
           return 0;
@@ -181,15 +154,9 @@ class Companies extends Component {
       });
     } else {
       sortedList = this.state.filteredCompanies.sort((a, b) => {
-        if (
-          this.getStatusIdByStatusName(a.status) >
-          this.getStatusIdByStatusName(b.status)
-        ) {
+        if (a.status > b.status) {
           return -1;
-        } else if (
-          this.getStatusIdByStatusName(a.status) <
-          this.getStatusIdByStatusName(b.status)
-        ) {
+        } else if (a.status < b.status) {
           return 1;
         } else {
           return 0;
@@ -204,6 +171,19 @@ class Companies extends Component {
   };
 
   render() {
+    if (this.state.renderCompanyDetails) {
+      return (
+        <CompanyDetails
+          {...this.props}
+          back={() => {
+            this.props.history.push({ pathname: '/empty' });
+            this.props.history.replace({ pathname: '/companies' });
+            this.setState({ renderCompanyDetails: false });
+            this.getCompanies(); //TODO: This should be replaced with something more efficient
+          }}
+        />
+      );
+    }
     return (
       <div className="text-center m-w-full m-h-full flex flex-col items-center justify-center">
         <div className="bg-gray-700 w-100 text-5xl pt-4 pb-4 text-white">
@@ -239,9 +219,9 @@ class Companies extends Component {
                 }
               >
                 <option value="Alla">Alla</option>
-                {this.state.statuses.map(status => (
-                  <option key={status.id} value={status.status}>
-                    {status.status}
+                {Object.keys(this.props.statuses).map(key => (
+                  <option key={key} value={key}>
+                    {this.props.statuses[key]}
                   </option>
                 ))}
               </select>
@@ -260,9 +240,9 @@ class Companies extends Component {
                 }
               >
                 <option value="Alla">Alla</option>
-                {this.state.users.map(user => (
-                  <option key={user.id} value={user.name}>
-                    {user.name}
+                {Object.keys(this.props.users).map(key => (
+                  <option key={key} value={key}>
+                    {this.props.users[key]}
                   </option>
                 ))}
               </select>
@@ -288,7 +268,7 @@ class Companies extends Component {
                 <tr>
                   <HeaderSortButton
                     text="Företag"
-                    attribute="company_name"
+                    attribute="name"
                     setSortStatus={this.setSortStatus}
                     sortStatus={this.state.sortStatus}
                   />
@@ -300,7 +280,7 @@ class Companies extends Component {
                   />
                   <HeaderSortButton
                     text="Ansvarig"
-                    attribute="responsible_name"
+                    attribute="user_id"
                     setSortStatus={this.setSortStatus}
                     sortStatus={this.state.sortStatus}
                   />
@@ -319,24 +299,24 @@ class Companies extends Component {
     );
   }
 
-  renderCompany({ id, company_name, status, responsible_name }) {
-    const statusColorId = this.getStatusColorFromStatusName(status);
+  renderCompany({ id, name, status, user_id }) {
+    const statusName = this.props.statuses[status];
     return (
       <tr key={id}>
-        <td>
-          <Link to={`companies/${id}`}>{company_name}</Link>
+        <td
+          onClick={() => {
+            this.props.history.push({ pathname: '/empty' });
+            this.props.history.replace({ pathname: `/companies/${id}` });
+            this.setState({ renderCompanyDetails: true });
+          }}
+        >
+          {name}
         </td>
-        <td className={`status-box status-color-${statusColorId}`}>{status}</td>
-        <td>{responsible_name}</td>
+        <td className={`status-box status-color-${status}`}>{statusName}</td>
+        <td>{this.props.users[user_id]}</td>
       </tr>
     );
   }
-
-  getStatusColorFromStatusName = status => {
-    const statusForCompany = this.state.statuses.find(s => s.status === status);
-    return statusForCompany ? statusForCompany.id : 0;
-  };
-
   renderAddNewInput = () => {
     return (
       <div className="body flex flex-column justify-center items-center mb-4">

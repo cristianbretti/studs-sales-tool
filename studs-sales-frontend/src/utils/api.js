@@ -12,8 +12,8 @@ export const statusesApi = () => {
   });
 };
 
-export const companiesApi = search => {
-  return fetch(`http://localhost:3005/api/companies${search}`, {
+export const companiesApi = () => {
+  return fetch(`http://localhost:3005/api/companies`, {
     headers: {
       'Content-Type': 'application/json'
     }
@@ -26,7 +26,7 @@ export const companiesApi = search => {
   });
 };
 
-export const membersApi = () => {
+export const usersApi = () => {
   return fetch(`http://localhost:3005/api/users`, {
     headers: {
       'Content-Type': 'application/json'

@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 import {
   companyInfoApi,
   companyContactsApi,
   companyCommentsApi,
-  membersApi,
-  statusesApi,
   updateCompanyApi,
   addCommentApi,
   updateCommentApi,
@@ -43,8 +40,6 @@ class CompanyDetails extends Component {
 
   componentDidMount = () => {
     this.getAllInfo();
-    this.getMembers();
-    this.getStatuses();
   };
 
   getAllInfo = async () => {
@@ -67,24 +62,6 @@ class CompanyDetails extends Component {
   getContacts = async () => {
     const { contacts } = await companyContactsApi(this.state.companyId);
     this.setState({ contacts });
-  };
-
-  getMembers = async () => {
-    try {
-      const { users } = await membersApi();
-      this.setState({ users });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  getStatuses = async () => {
-    try {
-      const { statuses } = await statusesApi();
-      this.setState({ statuses });
-    } catch (err) {
-      console.log(err);
-    }
   };
 
   updateCompany = async () => {
@@ -237,7 +214,7 @@ class CompanyDetails extends Component {
             <i
               className="fas fa-long-arrow-alt-left absolute top-0 left-0 text-white pl-8 pt-8 hover:cursor-pointer hover:underline"
               onClick={() => {
-                this.props.history.goBack();
+                this.props.back();
               }}
             />
           </div>
@@ -267,8 +244,10 @@ class CompanyDetails extends Component {
                   )
                 }
               >
-                {this.state.statuses.map(status => (
-                  <option value={status.id}>{status.status}</option>
+                {Object.keys(this.props.statuses).map(key => (
+                  <option key={key} value={key}>
+                    {this.props.statuses[key]}
+                  </option>
                 ))}
               </select>
             </div>
@@ -295,8 +274,10 @@ class CompanyDetails extends Component {
                 }}
               >
                 <option value={0}>Ingen</option>
-                {this.state.users.map(member => (
-                  <option value={member.id}>{member.name}</option>
+                {Object.keys(this.props.users).map(key => (
+                  <option key={key} value={key}>
+                    {this.props.users[key]}
+                  </option>
                 ))}
               </select>
             </div>
