@@ -18,8 +18,8 @@ class Companies extends Component {
       filterUser: 'Alla',
       filterStatus: 'Alla',
       sortStatus: {
-        property: 'name',
-        direction: 'ASC'
+        property: 'status',
+        direction: 'DESC'
       }
     };
   }
